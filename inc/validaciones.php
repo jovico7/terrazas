@@ -4,29 +4,29 @@ if (!filter_has_var(INPUT_POST, 'inicio')) {
     header('Location: ../index.php');
     exit();
 } else {
-    try{
+    try {
         include_once("./conexion.php");
 
         $user = $_POST["user"];
         $password = $_POST["password"];
         $username = $_POST['hiddenUsername'];
-    
-    
+
         if (empty($user) || empty($password)) {
             header("Location: ../index.php?empty");
             exit();
         } else {
-            $query = "SELECT id_usuario, nombre_user, contrasena FROM usuarios WHERE nombre_user = ?";
-            $stmt = mysqli_prepare($conn, $query);
-    
-            mysqli_stmt_bind_param($stmt, "s", $user);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_store_result($stmt);
-    
-            if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $id_usuario, $nombre_user, $contrasena);
-                mysqli_stmt_fetch($stmt);
-    
+            $query = "SELECT id_usuario, nombre_user, contrasena FROM usuarios WHERE nombre_user = :user";
+            $stmt = $pdo->prepare($query);
+
+            $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row) {
+                $id_usuario = $row['id_usuario'];
+                $nombre_user = $row['nombre_user'];
+                $contrasena = $row['contrasena'];
+
                 if (password_verify($password, $contrasena)) {
                     session_start();
                     $_SESSION["id"] = $id_usuario;
@@ -41,11 +41,8 @@ if (!filter_has_var(INPUT_POST, 'inicio')) {
                 header("Location: ../index.php?error");
                 exit();
             }
-    
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
         }
-    }catch(Exception $e){
+    } catch (Exception $e) {
         echo "Error:" . $e->getMessage();
         die();
     }

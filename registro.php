@@ -24,15 +24,15 @@ if (!isset($_SESSION['id'])) {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<style>
-    .table-responsive>.table-bordered{
-        margin-bottom: 0px !important;
-    }
+    <style>
+        .table-responsive>.table-bordered {
+            margin-bottom: 0px !important;
+        }
     </style>
-       <!-- Enlace a SweetAlert -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- Enlace a tu archivo popup.js -->
-  <script src="./js/popup.js" defer></script>
+    <!-- Enlace a SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Enlace a tu archivo popup.js -->
+    <script src="./js/popup.js" defer></script>
 </head>
 
 <body>
@@ -57,87 +57,70 @@ if (!isset($_SESSION['id'])) {
 
         <form method="get" action="">
 
-            <!-- FILTRO PARA USUARIOS FILTRO PARA USUARIOS FILTRO PARA USUARIOS FILTRO PARA USUARIOS FILTRO PARA USUARIOS FILTRO PARA USUARIOS -->
+            <!-- FILTRO PARA USUARIOS -->
             <select name="usuario" id="usuario">
                 <option value="">Todos los Usuarios</option>
-                <!-- Opciones de usuarios aquí -->
                 <?php
-                try{
-
+                try {
                     include_once('./inc/conexion.php');
                     $sqlUser = "SELECT nombre_user FROM usuarios;";
-                    $stmtUser = mysqli_prepare($conn, $sqlUser);
-                    mysqli_stmt_execute($stmtUser);
-                    mysqli_stmt_bind_result($stmtUser, $nom_user);
-                    while (mysqli_stmt_fetch($stmtUser)) {
-                        echo "<option value=\"$nom_user\"";
-                        if (isset($_GET['usuario']) && $_GET['usuario'] == $nom_user) {
+                    $stmtUser = $pdo->prepare($sqlUser);
+                    $stmtUser->execute();
+                    $resultUser = $stmtUser->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($resultUser as $row) {
+                        echo "<option value=\"" . $row['nombre_user'] . "\"";
+                        if (isset($_GET['usuario']) && $_GET['usuario'] == $row['nombre_user']) {
                             echo " selected";
                         }
-                        echo ">$nom_user</option>";
+                        echo ">" . $row['nombre_user'] . "</option>";
                     }
-    
-                    mysqli_stmt_close($stmtUser);
-                }catch(Exception $e){
+                } catch (Exception $e) {
                     echo "Error: " . $e->getMessage();
                 }
                 ?>
             </select>
-            <!-- FILTRO PARA SALAS FILTRO PARA SALAS FILTRO PARA SALAS FILTRO PARA SALAS FILTRO PARA SALAS FILTRO PARA SALAS FILTRO PARA SALAS -->
+
+            <!-- FILTRO PARA SALAS -->
             <select name="sala" id="sala">
                 <option value="">Todas las Salas</option>
-
-                <!-- Opciones de salas aquí -->
                 <?php
-    try{
-        $sqlSalas = "SELECT nombre_sala FROM salas;";
-        $stmtSalas = mysqli_prepare($conn, $sqlSalas);
-        mysqli_stmt_execute($stmtSalas);
-        mysqli_stmt_bind_result($stmtSalas, $nom_sala);
-
-        while (mysqli_stmt_fetch($stmtSalas)) {
-            echo "<option value=\"$nom_sala\"";
-            if (isset($_GET['sala']) && $_GET['sala'] == $nom_sala) {
-                echo " selected";
-            }
-            echo ">$nom_sala</option>";
-        }
-
-        mysqli_stmt_close($stmtSalas);
-    }catch(Exception $e){
+                try {
+                    $sqlSalas = "SELECT nombre_sala FROM salas;";
+                    $stmtSalas = $pdo->prepare($sqlSalas);
+                    $stmtSalas->execute();
+                    $resultSalas = $stmtSalas->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($resultSalas as $row) {
+                        echo "<option value=\"" . $row['nombre_sala'] . "\"";
+                        if (isset($_GET['sala']) && $_GET['sala'] == $row['nombre_sala']) {
+                            echo " selected";
+                        }
+                        echo ">" . $row['nombre_sala'] . "</option>";
+                    }
+                } catch (Exception $e) {
                     echo "Error: " . $e->getMessage();
                 }
-
-               
                 ?>
             </select>
 
-            <!-- FILTRO PARA MESAS FILTRO PARA MESAS FILTRO PARA MESAS FILTRO PARA MESAS FILTRO PARA MESAS FILTRO PARA MESAS FILTRO PARA MESAS -->
+            <!-- FILTRO PARA MESAS -->
             <select name="mesas" id="mesas">
                 <option value="">Todas las Mesas</option>
-                <!-- Opciones de usuarios aquí -->
                 <?php
-
-                try{
+                try {
                     $sqlMesas = "SELECT numero_mesa FROM mesas;";
-                    $stmtMesas = mysqli_prepare($conn, $sqlMesas);
-                    mysqli_stmt_execute($stmtMesas);
-                    mysqli_stmt_bind_result($stmtMesas, $num_mesa);
-    
-                    while (mysqli_stmt_fetch($stmtMesas)) {
-                        echo "<option value=\"$num_mesa\"";
-                        if (isset($_GET['mesas']) && $_GET['mesas'] == $num_mesa) {
+                    $stmtMesas = $pdo->prepare($sqlMesas);
+                    $stmtMesas->execute();
+                    $resultMesas = $stmtMesas->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($resultMesas as $row) {
+                        echo "<option value=\"" . $row['numero_mesa'] . "\"";
+                        if (isset($_GET['mesas']) && $_GET['mesas'] == $row['numero_mesa']) {
                             echo " selected";
                         }
-                        echo ">$num_mesa</option>";
+                        echo ">" . $row['numero_mesa'] . "</option>";
                     }
-    
-                    mysqli_stmt_close($stmtMesas);
-                }catch(Exception $e){
+                } catch (Exception $e) {
                     echo "Error: " . $e->getMessage();
                 }
-
-              
                 ?>
             </select>
 
@@ -154,107 +137,95 @@ if (!isset($_SESSION['id'])) {
 
             <button type="submit">Filtrar</button>
             <button type="submit">
-            <a style="text-decoration: none; color: black;" href="./registro.php">Borrar Flitros</a>    
+                <a style="text-decoration: none; color: black;" href="./registro.php">Borrar Flitros</a>
             </button>
 
         </form>
 
         <?php
+        try {
+            $numFiltro = isset($_GET['numero_filtro']) ? intval($_GET['numero_filtro']) : 0;
 
-try{
-    $numFiltro = isset($_GET['numero_filtro']) ? intval($_GET['numero_filtro']) : 0;
+            $sql = "SELECT u.nombre_user, s.nombre_sala, m.numero_mesa, o.fecha_inicio, o.fecha_fin,
+            TIMEDIFF(o.fecha_fin, o.fecha_inicio) AS duracion_ocupacion
+            FROM ocupaciones o 
+            INNER JOIN usuarios u ON o.id_usuario = u.id_usuario 
+            INNER JOIN mesas m ON o.id_mesa = m.id_mesa 
+            INNER JOIN salas s ON s.id_sala = m.id_sala";
 
-    $sql = "SELECT u.nombre_user, s.nombre_sala, m.numero_mesa, o.fecha_inicio, o.fecha_fin,
-        TIMEDIFF(o.fecha_fin, o.fecha_inicio) AS duracion_ocupacion
-        FROM ocupaciones o 
-        INNER JOIN usuarios u ON o.id_usuario = u.id_usuario 
-        INNER JOIN mesas m ON o.id_mesa = m.id_mesa 
-        INNER JOIN salas s ON s.id_sala = m.id_sala";
+            // FILTRO DE SALA POR $_GET
+            if (isset($_GET['sala']) && !empty($_GET['sala'])) {
+                $salaFilter = $pdo->quote($_GET['sala']);
+                // Le añadimos a esta fila el filtro WHERE 
+                $sql .= " WHERE s.nombre_sala = $salaFilter";
+            }
 
-    // FILTRO DE SALA POR $_GET
-    if (isset($_GET['sala']) && !empty($_GET['sala'])) {
-        $salaFilter = mysqli_real_escape_string($conn, $_GET['sala']);
-        // Le añadimos a esta fila el filtro WHERE 
-        $sql .= " WHERE s.nombre_sala = '$salaFilter'";
-    }
+            // FILTRO DE USUARIO POR $_GET
+            if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
+                $usuarioFilter = $pdo->quote($_GET['usuario']);
+                $sql .= (isset($_GET['sala']) && !empty($_GET['sala'])) ? " AND" : " WHERE";
+                $sql .= " u.nombre_user = $usuarioFilter";
+            }
 
-    // FILTRO DE USUARIO POR $_GET
-    if (isset($_GET['usuario']) && !empty($_GET['usuario'])) {
-        $usuarioFilter = mysqli_real_escape_string($conn, $_GET['usuario']);
-        $sql .= (isset($_GET['sala']) && !empty($_GET['sala'])) ? " AND" : " WHERE";
-        $sql .= " u.nombre_user = '$usuarioFilter'";
-    }
+            // FILTRO DE MESA POR $_GET
+            if (isset($_GET['mesas']) && !empty($_GET['mesas'])) {
+                $mesaFilter = intval($_GET['mesas']);
+                $sql .= (isset($_GET['mesas']) && !empty($_GET['mesas'])) ? " AND" : " WHERE";
+                $sql .= " m.numero_mesa = $mesaFilter";
+            }
 
-    // FILTRO DE MESA POR $_GET
-    if (isset($_GET['mesas']) && !empty($_GET['mesas'])) {
-        $mesaFilter = mysqli_real_escape_string($conn, $_GET['mesas']);
-        $sql .= (isset($_GET['mesas']) && !empty($_GET['mesas'])) ? " AND" : " WHERE";
-        $sql .= " m.numero_mesa = $mesaFilter";
-    }
+            // FILTRO NÚMERO REGISTROS
+            if ($numFiltro > 0) {
+                $sql .= " LIMIT $numFiltro";
+            }
 
-    // FILTRO NÚMERO REGISTROS
-    if ($numFiltro > 0) {
-        $sql .= " LIMIT $numFiltro";
-    }
+            // ACABAMOS EL CÓDIGO (para que se puedan mezclar los filtros, por ejemplo, sala y usuario)
+            $sql .= ";";
 
-    // ACABAMOS EL CÓDIGO (para que se puedan mezclar los filtros, por ejemplo, sala y usuario)
-    $sql .= ";";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = mysqli_prepare($conn, $sql);
+            if ($result) {
+                echo '<div class="table-responsive table-wrapper" style="background-color: white;">';
+                echo '<table class="table table-bordered">';
+                echo '<thead class="thead-dark">';
+                echo '<tr>';
+                echo '<th>Nombre Usuario</th>';
+                echo '<th>Sala</th>';
+                echo '<th>Número de Mesa</th>';
+                echo '<th>Fecha Inicio</th>';
+                echo '<th>Fecha Fin</th>';
+                echo '<th>Duración</th>';
+                echo '</tr>';
+                echo '</thead>';
+                echo '<tbody>';
 
-    if ($stmt === false) {
-        die("Error en la consulta: " . mysqli_error($conn));
-    }
+                foreach ($result as $row) {
+                    echo '<tr>';
+                    echo "<td>{$row['nombre_user']}</td>";
+                    echo "<td>{$row['nombre_sala']}</td>";
+                    echo "<td>{$row['numero_mesa']}</td>";
+                    echo "<td>{$row['fecha_inicio']}</td>";
+                    echo "<td>{$row['fecha_fin']}</td>";
+                    echo "<td>{$row['duracion_ocupacion']}</td>";
+                    echo '</tr>';
+                }
 
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $nombre_user, $nombre_sala, $numero_mesa, $fecha_inicio, $fecha_fin, $tiempo);
-    if (mysqli_stmt_fetch($stmt)) {
-        echo '<div class="table-responsive table-wrapper" style="background-color: white;">';
-        echo '<table class="table table-bordered">';
-        echo '<thead class="thead-dark">';
-        echo '<tr>';
-        echo '<th>Nombre Usuario</th>';
-        echo '<th>Sala</th>';
-        echo '<th>Número de Mesa</th>';
-        echo '<th>Fecha Inicio</th>';
-        echo '<th>Fecha Fin</th>';
-        echo '<th>Duración</th>';
-        echo '</tr>';
-        echo '</thead>';
-        echo '<tbody>';
-    
-        // Imprimir resultados
-        do {
-            echo '<tr>';
-            echo "<td>$nombre_user</td>";
-            echo "<td>$nombre_sala</td>";
-            echo "<td>$numero_mesa</td>";
-            echo "<td>$fecha_inicio</td>";
-            echo "<td>$fecha_fin</td>";
-            echo "<td>$tiempo</td>";
-            echo '</tr>';
-        } while (mysqli_stmt_fetch($stmt));
-    
-        echo '</tbody>';
-        echo '</table>';
-        echo '</div>';
-    } else {
-        echo '<a  href="./registro.php">';
-        echo '<img src="./img/LOGORICK _Blanco.png" alt="" style="width: 50%; display: block; margin: auto;"><br>';
-        echo '</a>';
-        echo "<div style='color: white; display: flex; justify-content: center;'>";
-        echo "<b style='font-size: 20px;' >¡Oops! Parece que las hamburguesas se han comido los resultados. ¡Intenta con otra combinación!</b>";
-        echo "</div>";
-    }
-
-    mysqli_stmt_close($stmt);
-}catch(Exception $e){
-    echo "Error: " . $e->getMessage();
-}
-       
-       
-
-        // ... (código de cierre de conexión)
+                echo '</tbody>';
+                echo '</table>';
+                echo '</div>';
+            } else {
+                echo '<a  href="./registro.php">';
+                echo '<img src="./img/LOGORICK _Blanco.png" alt="" style="width: 50%; display: block; margin: auto;"><br>';
+                echo '</a>';
+                echo "<div style='color: white; display: flex; justify-content: center;'>";
+                echo "<b style='font-size: 20px;' >¡Oops! Parece que las hamburguesas se han comido los resultados. ¡Intenta con otra combinación!</b>";
+                echo "</div>";
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
         ?>
     </div>
 </body>
