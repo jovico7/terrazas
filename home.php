@@ -33,6 +33,19 @@ if (!isset($_SESSION['id'])) {
         <a class="navbar-brand " href="#">
                 <img src="./img/LOGORICK _Blanco.png" alt="" width="100" height="90">
                 <a href="./registro.php"><button class="atrasboton"><img class="atrasimg" src="./img/libro.png" alt=""></button></a>
+            <form action="" method="POST" id="formSalas"></form>
+
+                <select id="tipo_sala" name="tipo_sala" onchange="cambiarOpciones()">
+                    <option value="todas" selected>Todas las Salas</option>
+                    <option value="terrazas" id='1'>Terrazas</option>
+                    <option value="comedores" id='2'>Comedores</option>
+                    <option value="salasPrivadas" id='3'>Salas Privadas</option>
+                </select>
+
+                <select id="sala" name="sala">
+                    <option value="" selected disabled>Selecciona una opción...</option>
+                </select>
+            </form>
             </a>
             </div>
             <div class="saludo">
@@ -42,7 +55,7 @@ if (!isset($_SESSION['id'])) {
         </div>
     </nav>
 <!------------FIN BARRA DE NAVEGACION--------------------->
-    <div class="image-grid">
+    <!-- <div class="image-grid">
         <a href="./mostrar.php?id=Terraza">
             <div class="image-item">
                 <img src="./img/terraza.jpg" alt="Imagen 1">
@@ -70,8 +83,9 @@ if (!isset($_SESSION['id'])) {
                 <p>Nuestras cuatro salas privadas están equipadas con una mesa en cada una. Estos espacios brindan privacidad y comodidad.</p>
             </div>
         </div>
-    </a>
-    </div>
+    </a> -->
+
+    <div id="home"></div>
     <script>
        document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -92,9 +106,9 @@ if (!isset($_SESSION['id'])) {
             });
         }
     });
-
     </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="./js/ajax.js"></script>
 </body>
 
 </html>

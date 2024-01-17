@@ -47,7 +47,7 @@ if (!isset($_SESSION['id'])) {
                 <b style="color:white">¡Bienvenido al portal, <?php echo $_SESSION['user'];?>!</b>
             </div>
             <div>
-                <a href="./mostra.php"><button class="atrasboton"><img class="atrasimg" src="./img/atras.png" alt=""></button></a>
+                <a href="./home.php"><button class="atrasboton"><img class="atrasimg" src="./img/atras.png" alt=""></button></a>
                 <a href="./inc/salir.php"><button class="logoutboton"><img class="logoutimg" src="./img/LOGOUT.png" alt=""></button></a>
             </div>
         </div>
@@ -187,7 +187,7 @@ if (!isset($_SESSION['id'])) {
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if ($result) {
-                echo '<div class="table-responsive table-wrapper" style="background-color: white;">';
+                echo '<div class="table-responsive table-wrapper" style="background-color: white; overflow-y: scroll; overflow-x: hidden;">';
                 echo '<table class="table table-bordered">';
                 echo '<thead class="thead-dark">';
                 echo '<tr>';

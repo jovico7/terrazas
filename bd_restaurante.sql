@@ -25,7 +25,8 @@ CREATE TABLE mesas (
     id_mesa INT PRIMARY KEY AUTO_INCREMENT,
     numero_mesa INT,
     id_sala INT,
-    estado ENUM('libre','ocupada') DEFAULT ('libre'),   -- El estado de la mesa (libre u ocupada)
+    estado ENUM('libre','ocupada','reservada','mantenimiento') DEFAULT ('libre'),
+    capacidad INT,                 -- Capacidad de la mesa (número de sillas)
     tipo_mesa VARCHAR(50),
     descripcion VARCHAR(255),
     FOREIGN KEY (id_sala) REFERENCES salas(id_sala)     -- Cada mesa está asociada a una sala específica 
@@ -36,7 +37,7 @@ CREATE TABLE sillas (
     id_silla INT PRIMARY KEY AUTO_INCREMENT,
     numero_silla INT,
     id_mesa INT,
-    estado ENUM('libre','ocupada') DEFAULT ('libre'), -- Estado de la silla (libre u ocupada)
+    estado ENUM('libre','ocupada','reservada', 'mantenimiento') DEFAULT ('libre'), -- Estado de la silla (libre u ocupada)
     tipo_silla VARCHAR(50),
     descripcion VARCHAR(255),
     FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa) -- Cada silla está asociada a una mesa específica
@@ -47,19 +48,11 @@ CREATE TABLE ocupaciones (
     id_ocupacion INT PRIMARY KEY AUTO_INCREMENT,
     id_usuario INT,
     id_mesa INT,
-    fecha_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,    -- Fecha y hora del inicio de la ocupación
-    fecha_fin DATETIME,       -- Fecha y hora del final de la ocupación
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario), -- Permite saber quién ha hecho una ocupación
-    FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa) -- Permite saber qué mesa ha estado ocupada
-);
-
--- Tabla para gestionar reservas
-CREATE TABLE reservas (
-    id_reserva INT PRIMARY KEY AUTO_INCREMENT,
-    id_usuario INT,
-    id_mesa INT,
-    fecha_reserva DATETIME DEFAULT CURRENT_TIMESTAMP,
-    comentario VARCHAR(255),
+    fecha_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_fin DATETIME,
+    tipo ENUM('reserva', 'ocupacion') DEFAULT 'ocupacion',
+    hora_reserva INT,  -- Nuevo campo para la hora de la reserva
+    minutos_reserva INT,  -- Nuevo campo para los minutos de la reserva
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa)
 );
@@ -130,14 +123,7 @@ INSERT INTO sillas (numero_silla, id_mesa, estado, tipo_silla, descripcion) VALU
     (5, 4, 'libre', 'Silla de Exterior', 'Silla cómoda para exteriores');
 
 -- Insertar ocupaciones (registros de ocupación de mesas)
-INSERT INTO ocupaciones (id_usuario, id_mesa, fecha_inicio, fecha_fin) VALUES
-    (1, 1, '2023-11-20 12:30:00', '2023-11-20 14:30:00'),
-    (2, 3, '2023-11-20 18:00:00', '2023-11-20 19:30:00'),
-    (3, 5, '2023-11-20 20:00:00', '2023-11-20 22:00:00');
-
-    -- Insertar algunas reservas de ejemplo
-INSERT INTO reservas (id_usuario, id_mesa, comentario) VALUES
-    (1, 2, 'Reserva para aniversario'),
-    (2, 6, 'Reserva para reunión de negocios'),
-    (3, 10, 'Reserva para cena romántica');
-
+INSERT INTO ocupaciones (id_usuario, id_mesa, fecha_inicio, fecha_fin, tipo) VALUES
+    (1, 1, '2023-11-20 12:30:00', '2023-11-20 14:30:00', 'ocupacion'),
+    (2, 3, '2023-11-20 18:00:00', '2023-11-20 19:30:00', 'ocupacion'),
+    (3, 5, '2023-11-20 20:00:00', '2023-11-20 22:00:00', 'ocupacion');
