@@ -9,6 +9,7 @@ CREATE TABLE usuarios (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nombre_user VARCHAR(255),
     contrasena VARCHAR(60),
+    email VARCHAR(60),
     trabajo VARCHAR(50)
 );
 

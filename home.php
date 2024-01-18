@@ -32,6 +32,21 @@ if (!isset($_SESSION['id'])) {
             <div>
         <a class="navbar-brand " href="#">
                 <img src="./img/LOGORICK _Blanco.png" alt="" width="100" height="90">
+                <?php
+                    require './inc/conexion.php';
+                    $id = $_SESSION['id'];
+                    $sql = "SELECT * FROM usuarios WHERE id_usuario = :id";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($users['trabajo'] === 'Administrador') {
+                    ?>
+                    <a href="./crudMesas.php"><button class="atrasboton"><img class="atrasimg" src="./img/writing.png" alt=""></button></a>
+                    <a href="./crudUsuarios.php"><button class="atrasboton"><img class="atrasimg" src="./img/account.png" alt=""></button></a>
+                    <?php
+                }
+                ?>
                 <a href="./registro.php"><button class="atrasboton"><img class="atrasimg" src="./img/libro.png" alt=""></button></a>
             <form action="" method="POST" id="formSalas"></form>
 
@@ -86,6 +101,7 @@ if (!isset($_SESSION['id'])) {
     </a> -->
 
     <div id="home"></div>
+    
     <script>
        document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
