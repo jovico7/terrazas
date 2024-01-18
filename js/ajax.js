@@ -1,42 +1,65 @@
+document.getElementById("tipo_sala").addEventListener("change", cambiarOpciones);
+
 function cambiarOpciones() {
     var tipoSala = document.getElementById("tipo_sala").value;
-    var sala = document.getElementById("sala").value;
-    console.log(tipoSala);
-    sala.innerHTML = '<option value="" selected disabled>Selecciona una opción...</option>';
+    console.log('tipo de sala: ' + tipoSala);
+
+    var sala = document.getElementById("sala");
+    sala.innerHTML = ''; // Limpiar las opciones existentes
+
+    var opcionDefault = document.createElement("option");
+    opcionDefault.value = "";
+    opcionDefault.text = "Selecciona una opción...";
+    sala.appendChild(opcionDefault);
 
     if (tipoSala === "terrazas") {
-        sala.innerHTML += '<option value="terraza0"> Todas las terrazas </option>';
-        sala.innerHTML += '<option value="terraza1"> Terraza 1</option>';
-        sala.innerHTML += '<option value="terraza2"> Terraza 2</option>';
-        sala.innerHTML += '<option value="terraza3"> Terraza 3</option>';
+        agregarOpcion("Todas las terrazas", "terraza0");
+        agregarOpcion("Terraza 1", "1");
+        agregarOpcion("Terraza 2", "terraza2");
+        agregarOpcion("Terraza 3", "terraza3");
     } else if (tipoSala === "comedores") {
-        sala.innerHTML += '<option value="comedor0"> Todos los comedores </option>';
-        sala.innerHTML += '<option value="comedor1"> Comedor 1</option>';
-        sala.innerHTML += '<option value="comedor2"> Comedor 2</option>';
+        agregarOpcion("Todos los comedores", "comedor0");
+        agregarOpcion("Comedor 1", "comedor1");
+        agregarOpcion("Comedor 2", "comedor2");
     } else if (tipoSala === "salasPrivadas") {
-        sala.innerHTML += '<option value="salaPrivada0"> Todas las Salas Privadas</option>';
-        sala.innerHTML += '<option value="salaPrivada2"> Sala Privada 2</option>';
-        sala.innerHTML += '<option value="salaPrivada3"> Sala Privada 3</option>';
-        sala.innerHTML += '<option value="salaPrivada4"> Sala Privada 4</option>';
+        agregarOpcion("Todas las Salas Privadas", "salaPrivada0");
+        agregarOpcion("Sala Privada 2", "salaPrivada2");
+        agregarOpcion("Sala Privada 3", "salaPrivada3");
+        agregarOpcion("Sala Privada 4", "salaPrivada4");
     }
+
+    console.log(sala.value);
 }
 
+function agregarOpcion(texto, valor) {
+    var opcion = document.createElement("option");
+    opcion.value = valor.toLowerCase().replace(/\s+/g, ''); // Valor sin espacios y en minúsculas
+    opcion.text = texto;
+    document.getElementById("sala").appendChild(opcion);
+}
+
+document.getElementById("sala").onchange = function() {
+    var salaSeleccionada = this.value;
+    console.log('Sala seleccionada:', salaSeleccionada);
+
+    verMesas(salaSeleccionada);
+};
 
 verMesas('');
 
-function verMesas() {
+function verMesas(salaSeleccionada) {
     var home = document.getElementById('home');
-    var tipoSala = document.getElementById("tipo_sala").value;
     var formdata = new FormData();
-    formdata.append('id', tipoSala);
+    formdata.append('id', salaSeleccionada);
 
     var ajax = new XMLHttpRequest();
 
     ajax.open('POST', 'mesas.php');
 
     ajax.onload = function() {
+        console.log("tipo de sala: " + salaSeleccionada);
         home.innerHTML = ajax.responseText;
     }
 
-    ajax.send();
+    ajax.send(formdata);
 };

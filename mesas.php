@@ -1,6 +1,9 @@
 
     <!----------------FIN DE LA BARRA DE NAVEGACION --------------------->
     <?php
+    ?>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <?php
     // if (!isset($_GET['id'])) {
     //     header("Location: ./home.php");
     //     exit;
@@ -55,7 +58,8 @@
             }
             echo '</div></div></a>';
             // FORMULARIO DE RESERVAS
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['reservar'] !== null && $_POST['id_mesa'] == $mesa['id_mesa']) {
+            // && $_POST['reservar'] !== null && $_POST['id_mesa'] == $mesa['id_mesa']
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ?>
                 <script>
                 document.getElementById('reservar').addEventListener('click', function () {

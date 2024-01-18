@@ -35,7 +35,7 @@ if (!isset($_SESSION['id'])) {
                 <a href="./registro.php"><button class="atrasboton"><img class="atrasimg" src="./img/libro.png" alt=""></button></a>
             <form action="" method="POST" id="formSalas"></form>
 
-                <select id="tipo_sala" name="tipo_sala" onchange="cambiarOpciones()">
+                <select id="tipo_sala" name="tipo_sala">
                     <option value="todas" selected>Todas las Salas</option>
                     <option value="terrazas" id='1'>Terrazas</option>
                     <option value="comedores" id='2'>Comedores</option>

@@ -14,9 +14,11 @@
 .saludo {
     color: white;
 }
-.diss{
+
+.diss {
     color: red;
 }
+
 .logoutboton {
     color: white;
     background: linear-gradient(to right, #9B273F, #011535);
@@ -91,7 +93,7 @@ body {
     margin: 0 auto;
     height: 85vh;
     padding-top: 5%;
-    width: 200vh;
+    width: 150vh;
 }
 
 .image-item {
