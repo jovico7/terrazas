@@ -56,7 +56,7 @@ if (!isset($_SESSION['id'])) {
     <div class="container mt-5">
         <h2 class="mb-4" style="color: white;">Trabajadores</h2>
         <form action="" method="POST" id="frmbusqueda">
-        <input type="text" name="buscar" id="buscar" placeholder="Buscar nombre...">
+        <input type="text" name="buscar" id="buscar" placeholder="Buscar usuarios...">
         </form>
         <div class="table-responsive table-wrapper" style="background-color: white; overflow-y: scroll; overflow-x: hidden; height:65vh;">
             <table class="table table-bordered">
@@ -76,7 +76,6 @@ if (!isset($_SESSION['id'])) {
                 </tbody>
             </table>
         </div>
-
     </div>
 </body>
 <script src="./js/usuariosAjax.js"></script>

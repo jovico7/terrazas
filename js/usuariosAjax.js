@@ -88,7 +88,7 @@ function formEditarUsuario(id, nombre, apellido1, apellido2, email, telefono, tr
         showConfirmButton: false,
         focusConfirm: false,
         preConfirm: () => {
-            // Puedes manejar la lógica de guardado aquí o con un evento separado
+
         }
     });
 }
@@ -123,7 +123,7 @@ function enviarEditarUsuario() {
 
     ajax.onload = function() {
         if (ajax.status === 200) {
-            console.log(ajax.responseText);
+            // console.log(ajax.responseText);
             Swal.fire({
                 title: 'Éxito',
                 text: 'El formulario se envió correctamente.',
@@ -131,26 +131,5 @@ function enviarEditarUsuario() {
             });
         }
     };
-    ajax.send(formdata);
-}
-
-function editarUsuario(id, nombre, apellido1, apellido2, email, telefono, trabajo) {
-    var formdata = new FormData();
-    formdata.append('id', id);
-    formdata.append('nombre', nombre);
-    formdata.append('apellido1', apellido1);
-    formdata.append('apellido2', apellido2);
-    formdata.append('email', email);
-    formdata.append('telefono', telefono);
-    formdata.append('trabajo', trabajo);
-
-    var ajax = new XMLHttpRequest();
-    ajax.open('POST', '../crudUsuarios.php');
-
-    ajax.onload = function() {
-        if (ajax.status === 200) {
-            console.log(ajax.responseText);
-        }
-    }
     ajax.send(formdata);
 }

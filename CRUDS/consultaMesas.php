@@ -12,10 +12,14 @@ if (!isset($_SESSION['id'])) {
 <?php
 
 include_once('../inc/conexion.php');
-
-$sql = "SELECT * FROM mesas m INNER JOIN salas s WHERE m.id_sala = s.id_sala;";
-
+$sql = 'SELECT DISTINCT tipo_sala FROM salas;';
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-echo json_encode($result);
+$sala = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$mesa = "<option value='todos'>Todos</option>";
+
+foreach ($sala as $fila) {
+    $salat = $fila['tipo_sala'];
+    $mesa .= "<option value='$salat'>$salat</option>";
+}
+echo json_encode($mesa);
