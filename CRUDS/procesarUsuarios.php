@@ -1,16 +1,31 @@
 
 <?php
+session_start();
+if (!isset($_SESSION['id'])) {
+    header("Location: ./index.php");
+    exit;
+} else if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: ./index.php");
+    exit;
+}
+?>
+<?php
 
 include_once('../inc/conexion.php');
 
 try {
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['busqueda'])) {
-    $sql = "SELECT * FROM `usuarios`;";
+    $valorBusqueda = '%' . $_POST['busqueda'] . '%';
+    $sql = "SELECT `id_usuario`, `nombre_user`, `apellido1`, `apellido2`, `email`, `telefono`, `trabajo`  FROM `usuarios`
+            WHERE `nombre_user` LIKE :busqueda;";
 }
 
 
 $stmt = $pdo->prepare($sql);
+$stmt->bindParam(":busqueda", $valorBusqueda, PDO::PARAM_STR);
+$stmt->bindParam(":busqueda", $valorBusqueda, PDO::PARAM_STR);
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($result);

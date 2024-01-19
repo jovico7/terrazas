@@ -36,6 +36,7 @@ if (!isset($_SESSION['id'])) {
 </head>
 
 <body>
+<p id='user_id' style='display: none;'><?php echo $_SESSION['user']; ?></p>
     <nav class="navbar navbar-light bg-lights position-top">
         <div class="container">
             <div>
@@ -55,7 +56,7 @@ if (!isset($_SESSION['id'])) {
     <div class="container mt-5">
         <h2 class="mb-4" style="color: white;">Trabajadores</h2>
         <form action="" method="POST" id="frmbusqueda">
-        <input type="text" name="buscar" id="buscar" placeholder="Buscar usuarios...">
+        <input type="text" name="buscar" id="buscar" placeholder="Buscar nombre...">
         </form>
         <div class="table-responsive table-wrapper" style="background-color: white; overflow-y: scroll; overflow-x: hidden; height:65vh;">
             <table class="table table-bordered">
@@ -66,6 +67,7 @@ if (!isset($_SESSION['id'])) {
                         <th>Segundo Apellido</th>
                         <th>Correo Electrónico</th>
                         <th>Teléfono</th>
+                        <th>Trabajo</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
