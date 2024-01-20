@@ -56,6 +56,12 @@ if (!isset($_SESSION['id'])) {
         <h2 class="mb-4" style="color: white;">Mesas</h2>
         <select name="salas" id="salas">
         </select>
+        <select name="tipo_sala" id="tipo_sala">
+        </select>
+        <select name="mesas" id="mesas">
+        </select>
+        <select name="estado" id="estado">
+        </select>
             <div class="table-responsive table-wrapper" style="background-color: white; overflow-y: scroll; overflow-x: hidden; height:65vh;">
                 <table class="table table-bordered">
                     <thead class="thead-dark">

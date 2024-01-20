@@ -6,6 +6,8 @@ ajax.onload = function() {
         sala.innerHTML = "";
         var json = JSON.parse(ajax.responseText);
         sala.innerHTML = json;
+
+        console.log(json);
     }
 };
 ajax.send();
