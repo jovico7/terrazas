@@ -13,17 +13,17 @@ if (!isset($_SESSION['id'])) {
 
 include_once('../inc/conexion.php');
 
-$numero_sala = $_POST['numero_sala'];
+$tipo_sala = $_POST['sala'];
 
-$sql = 'SELECT DISTINCT m.numero_mesa FROM mesas m INNER JOIN salas s ON m.id_sala = s.id_sala WHERE s.nombre_sala = :numero_sala;';
+$sql = 'SELECT DISTINCT nombre_sala FROM salas WHERE tipo_sala = :sala;';
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(":numero_sala", $numero_sala, PDO::PARAM_STR);
+$stmt->bindParam(":sala", $tipo_sala, PDO::PARAM_STR);
 $stmt->execute();
 $salas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $mesa = "<option value='todos'>Todos</option>";
 
 foreach ($salas as $fila) {
-    $numero_mesa = $fila['numero_mesa'];
-    $mesa .= "<option value='$numero_mesa'>$numero_mesa</option>";
+    $tipo_sala = $fila['nombre_sala'];
+    $mesa .= "<option value='$tipo_sala'>$tipo_sala</option>";
 }
 echo json_encode($mesa);

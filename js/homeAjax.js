@@ -78,47 +78,53 @@ function numeroMesas(valor) {
     mesas.addEventListener('change', function() {
         // console.log("Valor seleccionado del option: " + mesas.value);
         var tiposala = sala.value;
-        var numerosalas = numero_salas.value;
-        var valorMesas = mesas.value;
+        var numerosalas = numero_salas.value
+        var valorMesas = mesas.value
         verMesas(tiposala, numerosalas, valorMesas);
     });
 };
 
 
-function verMesas(valor1, valor2, valor3, valor4) {
+function verMesas(valor1, valor2, valor3) {
+    var home = document.getElementById('home');
     var formdata = new FormData();
-    // console.log(valor1);
-    if (valor1) {
-        formdata.append('sala', valor1);
-    }
-
+    formdata.append('sala', valor1);
     if (valor2) {
         formdata.append('numero_sala', valor2);
     }
+
     if (valor3) {
         formdata.append('mesas', valor3);
     }
-    if (valor4) {
-        formdata.append('estado', valor4);
-    }
+
     var ajax = new XMLHttpRequest();
     ajax.open('POST', './CRUDS/procesarMesas.php');
+
     ajax.onload = function() {
         if (ajax.status == 200) {
             var json = JSON.parse(ajax.responseText);
-            var tabla = "";
-            // console.log(json);
+            var tabla = '<div class="centrado" style="overflow-y: scroll; overflow-x: hidden; height:85vh;">';
+            tabla += "<div class='image-grid'>";
+            console.log(json);
             json.forEach(function(item) {
-                var str = "";
-                var str = "<tr>";
-                str += "<td>" + item.tipo_sala + "</td>";
-                str += "<td>" + item.nombre_sala + "</td>";
-                str += "<td>" + item.numero_mesa + "</td>";
-                str += "<td>" + item.estado + "</td>";
-                str += "<tr>";
+                var str = "<a><div class='image-item'>";
+                if (item.estado === "ocupada") {
+                    str += "<img class='filtro' src='./img/mesas.png' alt='Imagen 1'>";
+                    str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
+                    str += "<p class='diss'>" + item.estado + "</p>";
+                    str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Desocupar</button>";
+                } else {
+                    str += "<img class='' src='./img/mesas.png' alt='Imagen 1'>";
+                    str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
+                    str += "<p>" + item.estado + "</p>";
+                    str += "<button class='btn2 success btn-block' onclick='ocuparMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Ocupar</button>";
+                    str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Hacer una reserva</button>";
+                }
+                str += "</div></div></a>";
                 tabla += str;
             });
-            crudMesas.innerHTML = tabla;
+            tabla += '</div></div>';
+            home.innerHTML = tabla;
         }
     }
     ajax.send(formdata);

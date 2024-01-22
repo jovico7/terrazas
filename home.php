@@ -48,20 +48,19 @@ if (!isset($_SESSION['id'])) {
                 }
                 ?>
                 <a href="./registro.php"><button class="atrasboton"><img class="atrasimg" src="./img/libro.png" alt=""></button></a>
-            <form action="" method="POST" id="formSalas"></form>
 
-                <select id="tipo_sala" name="tipo_sala">
-                    <option value="todas" selected>Todas las Salas</option>
-                    <option value="terrazas" id='1'>Terrazas</option>
-                    <option value="comedores" id='2'>Comedores</option>
-                    <option value="salasPrivadas" id='3'>Salas Privadas</option>
-                </select>
-
-                <select id="sala" name="sala">
-                    <option value="" selected disabled>Selecciona una opción...</option>
-                </select>
-            </form>
-            </a>
+            <select name="salas" id="salas">
+            </select>
+            <select name="numero_sala" id="numero_sala">
+                <option value='todos'>Todos</option>
+            </select>
+            <select name="mesas" id="mesas">
+                <option value='todos'>Todos</option>
+            </select>
+            <select name="estado" id="estado">
+                <option name='ocupado' id='ocupado'>Ocupado</option>
+                <option name='libre' id='libre'>Libre</option>
+            </select>
             </div>
             <div class="saludo">
             <b style="color:white">¡Bienvenido al portal, <?php echo $_SESSION['user'];?>!</b>
@@ -124,7 +123,7 @@ if (!isset($_SESSION['id'])) {
     });
     </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="./js/ajax.js"></script>
+<script src="./js/homeAjax.js"></script>
 </body>
 
 </html>

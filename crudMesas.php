@@ -55,12 +55,18 @@ if (!isset($_SESSION['id'])) {
     <div class="container mt-5">
         <h2 class="mb-4" style="color: white;">Mesas</h2>
         <select name="salas" id="salas">
+            <option value='todos'>Todos</option>
         </select>
-        <select name="tipo_sala" id="tipo_sala">
+        <select name="numero_sala" id="numero_sala">
+            <option value='todos'>Todos</option>
         </select>
         <select name="mesas" id="mesas">
+            <option value='todos'>Todos</option>
         </select>
         <select name="estado" id="estado">
+            <option value='todos'>Todos</option>
+            <option value='ocupado' id='ocupado'>Ocupado</option>
+            <option value='libre' id='libre'>Libre</option>
         </select>
             <div class="table-responsive table-wrapper" style="background-color: white; overflow-y: scroll; overflow-x: hidden; height:65vh;">
                 <table class="table table-bordered">

@@ -62,12 +62,12 @@ CREATE TABLE ocupaciones (
 );
 
 -- Insertar usuarios (camareros, gerente, personal de mantenimiento)
-INSERT INTO usuarios (nombre_user, contrasena, trabajo) VALUES
-    ('Jorge', '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'Camarero'),
-    ('Olga', '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'Camarero'),
-    ('Miguel', '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'Camarero'),
-    ('Ana', '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'Gerente'),
-    ('David', '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'Mantenimiento');
+INSERT INTO usuarios (nombre_user, apellido1, apellido2, telefono, contrasena, email, trabajo) VALUES
+    ('Jorge', 'González', 'Martínez', 123456789, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'jorge@example.com', 'Camarero'),
+    ('Olga', 'Martínez', 'López', 987654321, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'olga@example.com', 'Camarero'),
+    ('Miguel', 'López', 'García', 654321987, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'miguel@example.com', 'Camarero'),
+    ('Ana', 'García', 'Martínez', 123123123, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'ana@example.com', 'Gerente'),
+    ('David', 'Martínez', 'Gómez', 456789123, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'david@example.com', 'Mantenimiento');
 
 -- Insertar salas
 INSERT INTO salas (nombre_sala, tipo_sala, capacidad) VALUES

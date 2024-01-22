@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['busqueda'])) {
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(":busqueda", $valorBusqueda, PDO::PARAM_STR);
-$stmt->bindParam(":busqueda", $valorBusqueda, PDO::PARAM_STR);
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($result);
