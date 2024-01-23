@@ -16,7 +16,7 @@ if (!isset($_SESSION['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RICK DECKARD - HISTORIAL</title>
+    <title>RICK DECKARD - CRUD MESAS</title>
     <link rel="shortcut icon" href="./img/LOGORICK.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/home.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -36,6 +36,16 @@ if (!isset($_SESSION['id'])) {
 </head>
 
 <body>
+                <?php
+                    require './inc/conexion.php';
+                    $id = $_SESSION['id'];
+                    $sql = "SELECT * FROM usuarios WHERE id_usuario = :id";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+                    ?>
+    <p style='display: none;' id='id_user'><?php echo $users['id_usuario']; ?></p>
     <nav class="navbar navbar-light bg-lights position-top">
         <div class="container">
             <div>
@@ -52,6 +62,7 @@ if (!isset($_SESSION['id'])) {
             </div>
         </div>
     </nav>
+    <p id='user_id' style='display: none;'><?php echo $_SESSION['user']; ?></p>
     <div class="container mt-5">
         <h2 class="mb-4" style="color: white;">Mesas</h2>
         <select name="salas" id="salas">
@@ -65,8 +76,6 @@ if (!isset($_SESSION['id'])) {
         </select>
         <select name="estado" id="estado">
             <option value='todos'>Todos</option>
-            <option value='ocupado' id='ocupado'>Ocupado</option>
-            <option value='libre' id='libre'>Libre</option>
         </select>
             <div class="table-responsive table-wrapper" style="background-color: white; overflow-y: scroll; overflow-x: hidden; height:65vh;">
                 <table class="table table-bordered">

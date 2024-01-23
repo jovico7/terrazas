@@ -25,7 +25,7 @@ $numeroSalaFiltro = isset($_POST['numero_sala']) ? $_POST['numero_sala'] : 'todo
 $mesas = isset($_POST['mesas']) ? $_POST['mesas'] : 'todos';
 $estado = isset($_POST['estado']) ? $_POST['estado'] : 'todos';
 
-$sql = 'SELECT salas.tipo_sala, salas.nombre_sala, mesas.numero_mesa, mesas.estado FROM mesas INNER JOIN salas ON mesas.id_sala = salas.id_sala WHERE 1 ';
+$sql = 'SELECT salas.tipo_sala, salas.nombre_sala, mesas.numero_mesa, mesas.id_mesa, mesas.estado FROM mesas INNER JOIN salas ON mesas.id_sala = salas.id_sala WHERE 1 ';
 
 if ($salaFiltro !== 'todos') {
     $sql .= ' AND salas.tipo_sala = :tipo_sala ';

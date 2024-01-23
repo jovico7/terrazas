@@ -34,7 +34,16 @@ if (!isset($_SESSION['id'])) {
                 <img src="./img/LOGORICK _Blanco.png" alt="" width="100" height="90">
                 <?php
                     require './inc/conexion.php';
+
                     $id = $_SESSION['id'];
+                    $sql2 = "SELECT * FROM usuarios WHERE id_usuario = :id";
+                    $stmt2 = $pdo->prepare($sql2);
+                    $stmt2->bindParam(":id", $id, PDO::PARAM_INT);
+                    $stmt2->execute();
+                    $users2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                    ?>
+                <p style='display: none;' id='id_user'><?php echo $users2['id_usuario']; ?></p>
+                <?php
                     $sql = "SELECT * FROM usuarios WHERE id_usuario = :id";
                     $stmt = $pdo->prepare($sql);
                     $stmt->bindParam(":id", $id, PDO::PARAM_INT);

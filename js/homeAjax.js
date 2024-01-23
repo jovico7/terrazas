@@ -16,14 +16,43 @@ ajax.send();
 
 sala.addEventListener('change', function() {
     var tiposala = sala.value;
+    estadoMesa(tiposala);
     numeroSala(tiposala);
     verMesas(tiposala);
 });
+
+function estadoMesa() {
+    var sala = document.getElementById('salas');
+    var estado = document.getElementById('estado');
+    var ajax = new XMLHttpRequest();
+
+    ajax.open('POST', './CRUDS/consultaEstado.php');
+
+    ajax.onload = function() {
+        if (ajax.status === 200) {
+            if (ajax.readyState === 4) {
+                var prueba = ajax.responseText;
+                // console.log(prueba);
+                estado.innerHTML = "";
+                var mesaOptions = JSON.parse(ajax.responseText);
+                estado.innerHTML = mesaOptions;
+            }
+        }
+    };
+    ajax.send();
+    estado.addEventListener('change', function() {
+        var tiposala = sala.value;
+        var valorEstado = estado.value
+        numeroSala(tiposala);
+        verMesas(tiposala, valorEstado);
+    });
+}
 
 
 function numeroSala(valor) {
     var sala = document.getElementById('salas');
     var numero_salas = document.getElementById('numero_sala');
+    var estado = document.getElementById('estado');
     var ajax = new XMLHttpRequest();
     var formdata = new FormData();
     // console.log("el valor de la sala es  " + valor);
@@ -44,11 +73,11 @@ function numeroSala(valor) {
     };
     ajax.send(formdata);
     numero_salas.addEventListener('change', function() {
-        // console.log("Valor seleccionado del option: " + numero_salas.value);
-        numeroMesas(numero_salas.value);
         var tiposala = sala.value;
         var numerosalas = numero_salas.value
-        verMesas(tiposala, numerosalas);
+        var valorEstado = estado.value
+        numeroMesas(numero_salas.value);
+        verMesas(tiposala, valorEstado, numerosalas);
     });
 };
 
@@ -56,6 +85,7 @@ function numeroMesas(valor) {
     var sala = document.getElementById('salas');
     var numero_salas = document.getElementById('numero_sala');
     var mesas = document.getElementById('mesas');
+    var estado = document.getElementById('estado');
     var ajax = new XMLHttpRequest();
     var formdata = new FormData();
     // console.log("el valor es de mesas es " + valor);
@@ -78,9 +108,10 @@ function numeroMesas(valor) {
     mesas.addEventListener('change', function() {
         // console.log("Valor seleccionado del option: " + mesas.value);
         var tiposala = sala.value;
-        var numerosalas = numero_salas.value
-        var valorMesas = mesas.value
-        verMesas(tiposala, numerosalas, valorMesas);
+        var numerosalas = numero_salas.value;
+        var valorMesas = mesas.value;
+        var valorEstado = estado.value
+        verMesas(tiposala, valorEstado, numerosalas, valorMesas);
     });
 };
 
@@ -105,19 +136,19 @@ function verMesas(valor1, valor2, valor3) {
             var json = JSON.parse(ajax.responseText);
             var tabla = '<div class="centrado" style="overflow-y: scroll; overflow-x: hidden; height:85vh;">';
             tabla += "<div class='image-grid'>";
-            console.log(json);
+            // console.log(json);
             json.forEach(function(item) {
                 var str = "<a><div class='image-item'>";
                 if (item.estado === "ocupada") {
                     str += "<img class='filtro' src='./img/mesas.png' alt='Imagen 1'>";
                     str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
                     str += "<p class='diss'>" + item.estado + "</p>";
-                    str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Desocupar</button>";
+                    str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Desocupar</button>";
                 } else {
                     str += "<img class='' src='./img/mesas.png' alt='Imagen 1'>";
                     str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
                     str += "<p>" + item.estado + "</p>";
-                    str += "<button class='btn2 success btn-block' onclick='ocuparMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Ocupar</button>";
+                    str += "<button id='ocupar' class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
                     str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Hacer una reserva</button>";
                 }
                 str += "</div></div></a>";
@@ -127,5 +158,74 @@ function verMesas(valor1, valor2, valor3) {
             home.innerHTML = tabla;
         }
     }
+    ajax.send(formdata);
+}
+
+function ocuparMesa(valor1, valor2) {
+    var id_user = document.getElementById('id_user').textContent;
+    var formdata = new FormData();
+    formdata.append('numero_mesa', valor1);
+    formdata.append('id_mesa', valor2);
+    formdata.append('id_user', id_user);
+    var ajax = new XMLHttpRequest();
+
+    ajax.open('POST', './CRUDS/ocuparMesa.php');
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            if (ajax.readyState === 4 && ajax.responseText === 'ok') {
+                // Operación exitosa
+                // console.log('Mesa ocupada con éxito');
+                var sala = document.getElementById('salas');
+                var tiposala = sala.value;
+                estadoMesa(tiposala);
+                numeroSala(tiposala);
+                verMesas(tiposala);
+            } else {
+                // Manejar otros casos si es necesario
+                // console.log('Error al ocupar la mesa');
+            }
+        }
+    }
+    ajax.send(formdata);
+
+}
+
+
+function desocuparMesa(valor1, valor2) {
+    var id_user = document.getElementById('id_user').textContent;
+    var formdata = new FormData();
+    // console.log(valor1);
+    // console.log(valor2);
+    // console.log(id_user);
+
+    formdata.append('numero_mesa', valor1);
+    formdata.append('id_mesa', valor2);
+    formdata.append('id_user', id_user);
+    var ajax = new XMLHttpRequest();
+
+    ajax.open('POST', './CRUDS/desocuparMesa.php');
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            if (ajax.readyState === 4) {
+                try {
+                    var response = JSON.parse(ajax.responseText);
+                    if (response.success) {
+                        // console.log(response);
+                        // console.log("Mesa desocupada con éxito");
+                        var sala = document.getElementById('salas');
+                        var tiposala = sala.value;
+                        estadoMesa(tiposala);
+                        numeroSala(tiposala);
+                        verMesas(tiposala);
+                    } else {
+                        // Manejar errores
+                        console.error("Error al desocupar mesa: " + response.error);
+                    }
+                } catch (error) {
+                    console.error("Error al analizar la respuesta JSON: " + error);
+                }
+            }
+        }
+    };
     ajax.send(formdata);
 }
