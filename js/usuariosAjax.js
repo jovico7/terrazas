@@ -45,7 +45,7 @@ function verUsuarios(valor) {
                         str += "</td>";
                         str += "<td>";
                         str += "<input id='eliminarUsuario' type='hidden' value='" + item.id_usuario + "'>";
-                        str += "<button onclick='eliminarUsuario(" + item.id_usuario + ")' name='eliminar_user' class='btn btn-danger'>Eliminar</button>";
+                        str += "<button onclick='formEliminarUsuario(" + item.id_usuario + ", \"" + item.nombre_user + "\")' name='eliminar_user' class='btn btn-danger'>Eliminar</button>";
                         str += "</td>";
                         str += "</tr>";
                         tabla += str;
@@ -64,7 +64,7 @@ function formEditarUsuario(id, nombre, apellido1, apellido2, email, telefono, tr
     Swal.fire({
         title: `Editar a ${nombre}`,
         html: `<form id="editarForm" style="text-align: left;">
-                <input type='hidden' id='id_user' value="${id}">
+                <input type='hidden' id='idUser' value="${id}">
                 <label for="nombre">Nombre:</label>
                 <input id="nombre" style="width: 80%; display: flex; margin-bottom: 5px; margin-left: 20px;" type="text" value="${nombre}"><br>
                 <label for="apellido1">Primer Apellido:</label>
@@ -87,14 +87,12 @@ function formEditarUsuario(id, nombre, apellido1, apellido2, email, telefono, tr
         showCancelButton: false,
         showConfirmButton: false,
         focusConfirm: false,
-        preConfirm: () => {
-
-        }
+        preConfirm: () => {}
     });
 }
 
 function enviarEditarUsuario() {
-    var id = document.getElementById('id_user').value;
+    var id = document.getElementById('idUser').value;
     var nombre = document.getElementById('nombre').value;
     var apellido1 = document.getElementById('apellido1').value;
     var apellido2 = document.getElementById('apellido2').value;
@@ -123,7 +121,7 @@ function enviarEditarUsuario() {
 
     ajax.onload = function() {
         if (ajax.status === 200) {
-            // console.log(ajax.responseText);
+            console.log(ajax.responseText);
             Swal.fire({
                 title: 'Éxito',
                 text: 'El formulario se envió correctamente.',
@@ -132,4 +130,60 @@ function enviarEditarUsuario() {
         }
     };
     ajax.send(formdata);
+}
+
+
+
+function formEliminarUsuario(valor1, valor2) {
+    Swal.fire({
+        icon: 'error',
+        title: `¿Eliminar a ${valor2}?`,
+        html: `<form id="eliminarForm" style="text-align: left;">
+                <input type='hidden' id='id_usuario' value="${valor1}">
+                <button type="submit" class="btn btn-danger" style="position: center;" onclick='enviarEliminarUsuario()'>Eliminar Usuario</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 10px;" onclick="Swal.close();">Cancelar</button>
+            </form>`,
+        showCancelButton: false,
+        showConfirmButton: false,
+        focusConfirm: false,
+        preConfirm: () => {
+
+        }
+    });
+}
+
+
+function enviarEliminarUsuario() {
+    var idUsuario = document.getElementById('id_usuario').value;
+
+    var formdata = new FormData();
+    formdata.append('id_user', idUsuario);
+    console.log(idUsuario);
+
+    var ajax = new XMLHttpRequest();
+    ajax.open('POST', './CRUDS/eliminarUsuarios.php');
+
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            var respuesta = ajax.responseText;
+            if (respuesta === 'ok') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Usuario eliminado con éxito',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                verUsuarios('');
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al eliminar el usuario',
+                    text: 'Por favor, inténtalo de nuevo más tarde.'
+                });
+            }
+        }
+    };
+
+    ajax.send(formdata);
+    Swal.close();
 }

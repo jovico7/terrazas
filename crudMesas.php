@@ -86,6 +86,7 @@ if (!isset($_SESSION['id'])) {
                             <th>Número de mesa</th>
                             <th>Estado</th>
                             <th>Ocupar/Desocupar</th>
+                            <th>Modificar mesa</th>
                         </tr>
                     </thead>
                     <tbody id="crudMesas">

@@ -36,6 +36,16 @@ if (!isset($_SESSION['id'])) {
 </head>
 
 <body>
+<?php
+                    require './inc/conexion.php';
+                    $id = $_SESSION['id'];
+                    $sql = "SELECT * FROM usuarios WHERE id_usuario = :id";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+                    ?>
+    <p style='display: none;' id='id_user'><?php echo $users['id_usuario']; ?></p>
 <p id='user_id' style='display: none;'><?php echo $_SESSION['user']; ?></p>
     <nav class="navbar navbar-light bg-lights position-top">
         <div class="container">

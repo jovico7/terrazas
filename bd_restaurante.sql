@@ -28,24 +28,14 @@ CREATE TABLE salas (
 CREATE TABLE mesas (
     id_mesa INT PRIMARY KEY AUTO_INCREMENT,
     numero_mesa INT,
+    numero_sillas INT,
     id_sala INT,
     estado ENUM('libre','ocupada','reservada','mantenimiento') DEFAULT ('libre'),
-    capacidad INT,                 -- Capacidad de la mesa (número de sillas)
     tipo_mesa VARCHAR(50),
     descripcion VARCHAR(255),
     FOREIGN KEY (id_sala) REFERENCES salas(id_sala)     -- Cada mesa está asociada a una sala específica 
 );
 
--- Tabla de sillas
-CREATE TABLE sillas (
-    id_silla INT PRIMARY KEY AUTO_INCREMENT,
-    numero_silla INT,
-    id_mesa INT,
-    estado ENUM('libre','ocupada','reservada', 'mantenimiento') DEFAULT ('libre'), -- Estado de la silla (libre u ocupada)
-    tipo_silla VARCHAR(50),
-    descripcion VARCHAR(255),
-    FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa) -- Cada silla está asociada a una mesa específica
-);
 
 -- Tabla para los registros de ocupación de las mesas
 CREATE TABLE ocupaciones (
@@ -69,6 +59,10 @@ INSERT INTO usuarios (nombre_user, apellido1, apellido2, telefono, contrasena, e
     ('Ana', 'García', 'Martínez', 123123123, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'ana@example.com', 'Gerente'),
     ('David', 'Martínez', 'Gómez', 456789123, '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'david@example.com', 'Mantenimiento');
 
+-- Insertar usuario administrador
+INSERT INTO usuarios (nombre_user, contrasena, trabajo) VALUES
+    ('admin', '$2y$10$wORRwXyRsJRc9ua8okkNuO6m/GbqBuZouNb4LZbwFPDG6HwNUhOVa', 'Administrador');
+
 -- Insertar salas
 INSERT INTO salas (nombre_sala, tipo_sala, capacidad) VALUES
     ('Terraza 1', 'Terraza', 20),
@@ -81,8 +75,9 @@ INSERT INTO salas (nombre_sala, tipo_sala, capacidad) VALUES
     ('Sala Privada 3', 'Privada', 12),
     ('Sala Privada 4', 'Privada', 15);
 
--- Insertar mesas en las terrazas (4 mesas en cada terraza)
-INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion) VALUES
+-- Insertar mesas de exterior (4 mesas en cada sala)
+INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion)
+VALUES
     (101, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
     (102, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
     (103, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
@@ -96,8 +91,9 @@ INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion) VALUES
     (303, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
     (304, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre');
 
--- Insertar mesas en los comedores (10 mesas en cada comedor)
-INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion) VALUES
+-- Insertar mesas comunes (6 mesas en cada comedor)
+INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion)
+VALUES
     (401, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
     (402, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
     (403, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
@@ -112,19 +108,14 @@ INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion) VALUES
     (506, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes');
 
 -- Insertar mesas en las salas privadas (1 mesa por sala)
-INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion) VALUES
+INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion)
+VALUES
     (601, 6, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales'),
     (701, 7, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales'),
     (801, 8, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales'),
     (901, 9, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales');
 
--- Insertar sillas en algunas mesas
-INSERT INTO sillas (numero_silla, id_mesa, estado, tipo_silla, descripcion) VALUES
-    (1, 1, 'libre', 'Silla de Exterior', 'Silla cómoda para exteriores'),
-    (2, 1, 'libre', 'Silla de Exterior', 'Silla cómoda para exteriores'),
-    (3, 2, 'libre', 'Silla de Exterior', 'Silla cómoda para exteriores'),
-    (4, 3, 'ocupada', 'Silla de Interior', 'Silla acolchada para mayor comodidad'),
-    (5, 4, 'libre', 'Silla de Exterior', 'Silla cómoda para exteriores');
+
 
 -- Insertar ocupaciones (registros de ocupación de mesas)
 INSERT INTO ocupaciones (id_usuario, id_mesa, fecha_inicio, fecha_fin, tipo) VALUES

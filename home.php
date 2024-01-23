@@ -60,13 +60,13 @@ if (!isset($_SESSION['id'])) {
 
             <select name="salas" id="salas">
             </select>
-            <select name="numero_sala" id="numero_sala">
+            <select style='display: none;' name="numero_sala" id="numero_sala">
                 <option value='todos'>Todos</option>
             </select>
-            <select name="mesas" id="mesas">
+            <select style='display: none;' name="mesas" id="mesas">
                 <option value='todos'>Todos</option>
             </select>
-            <select name="estado" id="estado">
+            <select style='display: none;' name="estado" id="estado">
                 <option name='ocupado' id='ocupado'>Ocupado</option>
                 <option name='libre' id='libre'>Libre</option>
             </select>

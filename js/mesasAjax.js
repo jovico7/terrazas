@@ -152,9 +152,12 @@ function verMesas(valor1, valor2, valor3, valor4) {
                 } else {
                     str += "<td>";
                     str += "<button class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
-                    str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_mesa + "," + item.numero_mesa + ")'>Hacer una reserva</button>";
+                    str += "<button class='btn2 success btn-block' onclick='formReservarMesa(" + item.id_sala + "," + item.numero_mesa + "," + item.id_mesa + ")'>Hacer una reserva</button>";
                     str += "</td>";
                 }
+                str += "<td style='position: center;'>";
+                str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Modificar</button>";
+                str += "</td>";
                 str += "<tr>";
                 tabla += str;
             });
@@ -165,8 +168,58 @@ function verMesas(valor1, valor2, valor3, valor4) {
 }
 
 
-reservarMesa() {
+function formReservarMesa(idSala, numeroMesa, idMesa) {
+    var id_user = document.getElementById('id_user').textContent;
+    Swal.fire({
+        title: `Reservar Mesa ${numeroMesa}`,
+        html: `<form id="editarForm" style="text-align: left;">
+                <input type='hidden' id='id_user' value="${id_user}">
+                <input type='hidden' id='id_sala' value="${idSala}">
+                <input type='hidden' id='id_mesa' value="${idMesa}">
+                <label for="fecha-ini">Seleccione la fecha y la hora de reserva:</label>
+                <input id="fecha-ini" type="date">
+                <input id="hora-ini" type="time"><br><br>
+                <button type="submit" class="btn btn-success" onclick='enviarReservarMesa()'>Reservar Mesa</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 10px;" onclick="Swal.close();">Cancelar</button>
+            </form>`,
+        showCancelButton: false,
+        showConfirmButton: false,
+        focusConfirm: false,
+        preConfirm: () => {
 
+        }
+    });
+}
+
+function enviarReservarMesa() {
+    var fechaReserva = document.getElementById('fecha-ini').value;
+    var horaReserva = document.getElementById('hora-ini').value;
+
+    var idUser = document.getElementById('id_user').value;
+    var idSala = document.getElementById('id_sala').value;
+    var idMesa = document.getElementById('id_mesa').value;
+
+    var formdata = new FormData();
+    formdata.append('id_user', idUser);
+    formdata.append('id_sala', idSala);
+    formdata.append('id_mesa', idMesa);
+    formdata.append('fecha_reserva', fechaReserva);
+    formdata.append('hora_reserva', horaReserva);
+
+    var ajax = new XMLHttpRequest();
+
+    ajax.open('POST', './CRUDS/reservarMesa.php');
+
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            Swal.fire('Reserva exitosa', 'La mesa ha sido reservada correctamente', 'success');
+        } else {
+            Swal.fire('Error', 'Hubo un problema al realizar la reserva', 'error');
+            console.log(ajax.responseText);
+        }
+        Swal.close();
+    };
+    ajax.send(formdata);
 }
 
 function ocuparMesa(valor1, valor2) {

@@ -144,12 +144,14 @@ function verMesas(valor1, valor2, valor3) {
                     str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
                     str += "<p class='diss'>" + item.estado + "</p>";
                     str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Desocupar</button>";
+                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Modificar</button>";
                 } else {
                     str += "<img class='' src='./img/mesas.png' alt='Imagen 1'>";
                     str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
                     str += "<p>" + item.estado + "</p>";
                     str += "<button id='ocupar' class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
-                    str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Hacer una reserva</button>";
+                    str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Reservar Mesa</button>";
+                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Modificar</button>";
                 }
                 str += "</div></div></a>";
                 tabla += str;
@@ -160,6 +162,46 @@ function verMesas(valor1, valor2, valor3) {
     }
     ajax.send(formdata);
 }
+
+function modificarMesa() {
+    Swal.fire({
+        title: `Modificar Mesa`,
+        html: `<form id="editarForm" style="text-align: center;">
+                <h5> Número de Sillas </h5>
+                <button type="button" id="botonRestar" onclick="restarNumero()">-</button>
+                <input id="numeroInput" type="number" value="1" min="1" max="6">
+                <button type="button" id="botonSumar" onclick="sumarNumero()">+</button>
+                </form>`,
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            // Puedes obtener el valor del número aquí y realizar las acciones necesarias
+            var numeroSeleccionado = document.getElementById('numeroInput').value;
+            // Aquí puedes realizar las acciones necesarias con el número seleccionado
+            console.log('Número seleccionado:', numeroSeleccionado);
+        }
+    });
+}
+
+function sumarNumero() {
+    var numeroInput = document.getElementById('numeroInput');
+    var numeroActual = parseInt(numeroInput.value, 10);
+    if (numeroActual < 6) {
+        numeroActual++;
+        numeroInput.value = numeroActual;
+    }
+}
+
+function restarNumero() {
+    var numeroInput = document.getElementById('numeroInput');
+    var numeroActual = parseInt(numeroInput.value, 10);
+    if (numeroActual > 1) {
+        numeroActual--;
+        numeroInput.value = numeroActual;
+    }
+}
+
 
 function ocuparMesa(valor1, valor2) {
     var id_user = document.getElementById('id_user').textContent;
