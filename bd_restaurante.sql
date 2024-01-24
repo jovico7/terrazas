@@ -46,7 +46,6 @@ CREATE TABLE ocupaciones (
     fecha_fin DATETIME,
     tipo ENUM('reserva', 'ocupacion') DEFAULT 'ocupacion',
     hora_reserva INT,  -- Nuevo campo para la hora de la reserva
-    minutos_reserva INT,  -- Nuevo campo para los minutos de la reserva
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_mesa) REFERENCES mesas(id_mesa)
 );
@@ -76,44 +75,44 @@ INSERT INTO salas (nombre_sala, tipo_sala, capacidad) VALUES
     ('Sala Privada 4', 'Privada', 15);
 
 -- Insertar mesas de exterior (4 mesas en cada sala)
-INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion)
+INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion, numero_sillas)
 VALUES
-    (101, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (102, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (103, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (104, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (201, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (202, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (203, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (204, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (301, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (302, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (303, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre'),
-    (304, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre');
+    (101, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (102, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (103, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (104, 1, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (201, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (202, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (203, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (204, 2, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (301, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (302, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (303, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4),
+    (304, 3, 'libre', 'Mesa de Exterior', 'Mesa para disfrutar al aire libre', 4);
 
 -- Insertar mesas comunes (6 mesas en cada comedor)
-INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion)
+INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion, numero_sillas)
 VALUES
-    (401, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
-    (402, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
-    (403, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
-    (404, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
-    (405, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
-    (406, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños'),
-    (501, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes'),
-    (502, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes'),
-    (503, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes'),
-    (504, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes'),
-    (505, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes'),
-    (506, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes');
+    (401, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños', 6),
+    (402, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños', 6),
+    (403, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños', 6),
+    (404, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños', 6),
+    (405, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños', 6),
+    (406, 4, 'libre', 'Mesa Común', 'Mesa para grupos pequeños', 6),
+    (501, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes', 6),
+    (502, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes', 6),
+    (503, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes', 6),
+    (504, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes', 6),
+    (505, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes', 6),
+    (506, 5, 'libre', 'Mesa Común', 'Mesa para grupos grandes', 6);
 
 -- Insertar mesas en las salas privadas (1 mesa por sala)
-INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion)
+INSERT INTO mesas (numero_mesa, id_sala, estado, tipo_mesa, descripcion, numero_sillas)
 VALUES
-    (601, 6, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales'),
-    (701, 7, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales'),
-    (801, 8, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales'),
-    (901, 9, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales');
+    (601, 6, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales', 1),
+    (701, 7, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales', 1),
+    (801, 8, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales', 1),
+    (901, 9, 'libre', 'Mesa VIP', 'Mesa en sala privada para eventos especiales', 1);
 
 
 

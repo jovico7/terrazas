@@ -84,6 +84,7 @@ if (!isset($_SESSION['id'])) {
                             <th>Tipo de sala</th>
                             <th>Número de sala</th>
                             <th>Número de mesa</th>
+                            <th>Número de sillas</th>
                             <th>Estado</th>
                             <th>Ocupar/Desocupar</th>
                             <th>Modificar mesa</th>

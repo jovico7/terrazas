@@ -144,6 +144,7 @@ function verMesas(valor1, valor2, valor3, valor4) {
                 str += "<td>" + item.tipo_sala + "</td>";
                 str += "<td>" + item.nombre_sala + "</td>";
                 str += "<td>" + item.numero_mesa + "</td>";
+                str += "<td>" + item.numero_sillas + "</td>";
                 str += "<td>" + item.estado + "</td>";
                 if (item.estado === "ocupada") {
                     str += "<td>";
@@ -156,7 +157,7 @@ function verMesas(valor1, valor2, valor3, valor4) {
                     str += "</td>";
                 }
                 str += "<td style='position: center;'>";
-                str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Modificar</button>";
+                str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + "," + item.numero_sillas + ")'>Modificar</button>";
                 str += "</td>";
                 str += "<tr>";
                 tabla += str;
@@ -167,6 +168,66 @@ function verMesas(valor1, valor2, valor3, valor4) {
     ajax.send(formdata);
 }
 
+function modificarMesa(numeroMesa, idMesa, numeroSillas) {
+    Swal.fire({
+        title: `Modificar Mesa`,
+        html: `<form id="editarForm" style="text-align: center;">
+                <h5> Número de Sillas </h5>
+                <input style='display: none;' id='numeroMesa' value='${numeroMesa}'>
+                <input style='display: none;' id='idMesa' value='${idMesa}'>
+                <button type="button" id="botonRestar" onclick="restarNumero()">-</button>
+                <input id="numeroInput" type="number" value="${numeroSillas}" min="1" max="6">
+                <button type="button" id="botonSumar" onclick="sumarNumero()">+</button>
+                </form>`,
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            modificarSillas();
+        }
+    });
+}
+
+function modificarSillas() {
+    var numeroMesa = document.getElementById('numeroMesa').value;
+    var idMesa = document.getElementById('idMesa').value;
+    var numeroSillas = document.getElementById('numeroInput').value;
+    var sala = document.getElementById('salas');
+    var formdata = new FormData();
+    formdata.append('numero_mesa', numeroMesa);
+    formdata.append('id_mesa', idMesa);
+    formdata.append('numero_sillas', numeroSillas);
+
+    var ajax = new XMLHttpRequest();
+    ajax.open('POST', './CRUDS/modificarSillas.php');
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            // console.log(ajax.responseText);
+            if (ajax.readyState === 4) {
+                verMesas(sala.value);
+            }
+        }
+    }
+    ajax.send(formdata);
+}
+
+function sumarNumero() {
+    var numeroInput = document.getElementById('numeroInput');
+    var numeroActual = parseInt(numeroInput.value, 10);
+    if (numeroActual < 6) {
+        numeroActual++;
+        numeroInput.value = numeroActual;
+    }
+}
+
+function restarNumero() {
+    var numeroInput = document.getElementById('numeroInput');
+    var numeroActual = parseInt(numeroInput.value, 10);
+    if (numeroActual > 1) {
+        numeroActual--;
+        numeroInput.value = numeroActual;
+    }
+}
 
 function formReservarMesa(idSala, numeroMesa, idMesa) {
     var id_user = document.getElementById('id_user').textContent;
@@ -186,7 +247,7 @@ function formReservarMesa(idSala, numeroMesa, idMesa) {
         showConfirmButton: false,
         focusConfirm: false,
         preConfirm: () => {
-
+            enviarReservarMesa();
         }
     });
 }

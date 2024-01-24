@@ -141,17 +141,17 @@ function verMesas(valor1, valor2, valor3) {
                 var str = "<a><div class='image-item'>";
                 if (item.estado === "ocupada") {
                     str += "<img class='filtro' src='./img/mesas.png' alt='Imagen 1'>";
-                    str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
+                    str += "<div class='image-text'><h3>Mesa " + item.numero_mesa + " - " + item.numero_sillas + "</h3>";
                     str += "<p class='diss'>" + item.estado + "</p>";
                     str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Desocupar</button>";
-                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Modificar</button>";
+                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + "," + item.numero_sillas + ")'>Modificar</button>";
                 } else {
                     str += "<img class='' src='./img/mesas.png' alt='Imagen 1'>";
-                    str += "<div class='image-text'><h2>Mesa " + item.numero_mesa + "</h2>";
+                    str += "<div class='image-text'><h3>Mesa " + item.numero_mesa + " - " + item.numero_sillas + "</h3>";
                     str += "<p>" + item.estado + "</p>";
                     str += "<button id='ocupar' class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
                     str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Reservar Mesa</button>";
-                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Modificar</button>";
+                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + "," + item.numero_sillas + ")'>Modificar</button>";
                 }
                 str += "</div></div></a>";
                 tabla += str;
@@ -163,25 +163,47 @@ function verMesas(valor1, valor2, valor3) {
     ajax.send(formdata);
 }
 
-function modificarMesa() {
+function modificarMesa(numeroMesa, idMesa, numeroSillas) {
     Swal.fire({
         title: `Modificar Mesa`,
         html: `<form id="editarForm" style="text-align: center;">
                 <h5> Número de Sillas </h5>
+                <input style='display: none;' id='numeroMesa' value='${numeroMesa}'>
+                <input style='display: none;' id='idMesa' value='${idMesa}'>
                 <button type="button" id="botonRestar" onclick="restarNumero()">-</button>
-                <input id="numeroInput" type="number" value="1" min="1" max="6">
+                <input id="numeroInput" type="number" value="${numeroSillas}" min="1" max="6">
                 <button type="button" id="botonSumar" onclick="sumarNumero()">+</button>
                 </form>`,
         showCancelButton: true,
         confirmButtonText: 'Aceptar',
         cancelButtonText: 'Cancelar',
         preConfirm: () => {
-            // Puedes obtener el valor del número aquí y realizar las acciones necesarias
-            var numeroSeleccionado = document.getElementById('numeroInput').value;
-            // Aquí puedes realizar las acciones necesarias con el número seleccionado
-            console.log('Número seleccionado:', numeroSeleccionado);
+            modificarSillas();
         }
     });
+}
+
+function modificarSillas() {
+    var numeroMesa = document.getElementById('numeroMesa').value;
+    var idMesa = document.getElementById('idMesa').value;
+    var numeroSillas = document.getElementById('numeroInput').value;
+    var sala = document.getElementById('salas');
+    var formdata = new FormData();
+    formdata.append('numero_mesa', numeroMesa);
+    formdata.append('id_mesa', idMesa);
+    formdata.append('numero_sillas', numeroSillas);
+
+    var ajax = new XMLHttpRequest();
+    ajax.open('POST', './CRUDS/modificarSillas.php');
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            // console.log(ajax.responseText);
+            if (ajax.readyState === 4) {
+                verMesas(sala.value);
+            }
+        }
+    }
+    ajax.send(formdata);
 }
 
 function sumarNumero() {
@@ -201,7 +223,6 @@ function restarNumero() {
         numeroInput.value = numeroActual;
     }
 }
-
 
 function ocuparMesa(valor1, valor2) {
     var id_user = document.getElementById('id_user').textContent;
