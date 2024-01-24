@@ -17,7 +17,7 @@ $id_user = $_POST['id_user'];
 $id_sala = $_POST['id_sala'];
 $id_mesa = $_POST['id_mesa'];
 $fecha_reserva = $_POST['fecha_reserva'];
-$hora_reserva = $_POST['hora_reserva'];
+// $hora_reserva = $_POST['hora_reserva'];
 
 try {
     // Iniciar una transacción

@@ -117,6 +117,7 @@ function numeroMesas(valor) {
 
 
 function verMesas(valor1, valor2, valor3, valor4) {
+    var id_user = document.getElementById('id_user').textContent;
     var formdata = new FormData();
     // console.log(valor1);
     if (valor1) {
@@ -150,10 +151,14 @@ function verMesas(valor1, valor2, valor3, valor4) {
                     str += "<td>";
                     str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Desocupar</button>";
                     str += "</td>";
+                } else if (item.estado === "libre") {
+                    str += "<td>";
+                    str += "<button class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
+                    str += "<button class='btn2 success btn-block' onclick='formReservarMesa(" + item.id_sala + "," + item.numero_mesa + "," + item.id_mesa + "," + id_user + ")'>Hacer una reserva</button>";
+                    str += "</td>";
                 } else {
                     str += "<td>";
                     str += "<button class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
-                    str += "<button class='btn2 success btn-block' onclick='formReservarMesa(" + item.id_sala + "," + item.numero_mesa + "," + item.id_mesa + ")'>Hacer una reserva</button>";
                     str += "</td>";
                 }
                 str += "<td style='position: center;'>";
@@ -229,12 +234,11 @@ function restarNumero() {
     }
 }
 
-function formReservarMesa(idSala, numeroMesa, idMesa) {
-    var id_user = document.getElementById('id_user').textContent;
+function formReservarMesa(idSala, numeroMesa, idMesa, idUser) {
     Swal.fire({
         title: `Reservar Mesa ${numeroMesa}`,
         html: `<form id="editarForm" style="text-align: left;">
-                <input type='hidden' id='id_user' value="${id_user}">
+                <input type='hidden' id='id_user' value="${idUser}">
                 <input type='hidden' id='id_sala' value="${idSala}">
                 <input type='hidden' id='id_mesa' value="${idMesa}">
                 <label for="fecha-ini">Seleccione la fecha y la hora de reserva:</label>
@@ -259,6 +263,13 @@ function enviarReservarMesa() {
     var idUser = document.getElementById('id_user').value;
     var idSala = document.getElementById('id_sala').value;
     var idMesa = document.getElementById('id_mesa').value;
+
+    console.log('Datos a enviar:');
+    console.log('id_user:', idUser);
+    console.log('id_sala:', idSala);
+    console.log('id_mesa:', idMesa);
+    console.log('fecha_reserva:', fechaReserva);
+    console.log('hora_reserva:', horaReserva);
 
     var formdata = new FormData();
     formdata.append('id_user', idUser);

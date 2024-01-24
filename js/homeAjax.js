@@ -118,6 +118,7 @@ function numeroMesas(valor) {
 
 function verMesas(valor1, valor2, valor3) {
     var home = document.getElementById('home');
+    var id_user = document.getElementById('id_user').textContent;
     var formdata = new FormData();
     formdata.append('sala', valor1);
     if (valor2) {
@@ -145,12 +146,18 @@ function verMesas(valor1, valor2, valor3) {
                     str += "<p class='diss'>" + item.estado + "</p>";
                     str += "<button class='btn2 danger btn-block' onclick='desocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Desocupar</button>";
                     str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + "," + item.numero_sillas + ")'>Modificar</button>";
-                } else {
+                } else if (item.estado === "libre") {
                     str += "<img class='' src='./img/mesas.png' alt='Imagen 1'>";
                     str += "<div class='image-text'><h3>Mesa " + item.numero_mesa + " - " + item.numero_sillas + "</h3>";
                     str += "<p>" + item.estado + "</p>";
                     str += "<button id='ocupar' class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
-                    str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.id_mesa + "," + item.numero_mesa + ")'>Reservar Mesa</button>";
+                    str += "<button class='btn2 success btn-block' onclick='reservarMesa(" + item.id_sala + "," + item.numero_mesa + "," + item.id_mesa + "," + id_user + ")'>Reservar Mesa</button>";
+                    str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + "," + item.numero_sillas + ")'>Modificar</button>";
+                } else {
+                    str += "<img class='reserva' src='./img/mesas.png' alt='Imagen 1'>";
+                    str += "<div class='image-text'><h3>Mesa " + item.numero_mesa + " - " + item.numero_sillas + "</h3>";
+                    str += "<p>" + item.estado + "</p>";
+                    str += "<button id='ocupar' class='btn2 success btn-block' onclick='ocuparMesa(" + item.numero_mesa + "," + item.id_mesa + ")'>Ocupar</button>";
                     str += "<button class='btn2 danger btn-block' onclick='modificarMesa(" + item.numero_mesa + "," + item.id_mesa + "," + item.numero_sillas + ")'>Modificar</button>";
                 }
                 str += "</div></div></a>";
@@ -160,6 +167,75 @@ function verMesas(valor1, valor2, valor3) {
             home.innerHTML = tabla;
         }
     }
+    ajax.send(formdata);
+}
+
+function reservarMesa(idSala, numeroMesa, idMesa, idUser) {
+    Swal.fire({
+        title: `Reservar Mesa ${numeroMesa}`,
+        html: `<form id="editarForm" style="text-align: left;">
+                <input type='hidden' id='idUsuarios' value="${idUser}">
+                <input type='hidden' id='idSalass' value="${idSala}">
+                <input type='hidden' id='idMesass' value="${idMesa}">
+                <label for="fecha-ini">Seleccione la fecha y la hora de reserva:</label>
+                <input id="fecha-ini" type="date" required>
+                <input id="hora-ini" type="time" required><br><br>
+                <button type="submit" class="btn btn-success" onclick='enviarReservarMesa()'>Reservar Mesa</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 10px;" onclick="Swal.close();">Cancelar</button>
+            </form>`,
+        showCancelButton: false,
+        showConfirmButton: false,
+        focusConfirm: false,
+        preConfirm: () => {}
+    });
+}
+
+function enviarReservarMesa() {
+    var fechaReserva = document.getElementById('fecha-ini').value;
+    var horaReserva = document.getElementById('hora-ini').value;
+    var sala = document.getElementById('salas');
+    var idUser = document.getElementById('idUsuarios').value;
+    var idSala = document.getElementById('idSalass').value;
+    var idMesa = document.getElementById('idMesass').value;
+
+    console.log('Datos a enviar:');
+    console.log('id_user:', idUser);
+    console.log('id_sala:', idSala);
+    console.log('id_mesa:', idMesa);
+    console.log('fecha_reserva:', fechaReserva);
+    console.log('hora_reserva:', horaReserva);
+
+    var formdata = new FormData();
+    formdata.append('id_user', idUser);
+    formdata.append('id_sala', idSala);
+    formdata.append('id_mesa', idMesa);
+    formdata.append('fecha_reserva', fechaReserva);
+    formdata.append('hora_reserva', horaReserva);
+
+    var ajax = new XMLHttpRequest();
+
+    ajax.open('POST', './CRUDS/reservarMesa.php');
+
+    ajax.onload = function() {
+        if (ajax.status == 200) {
+            console.log(ajax.responseText);
+            Swal.fire({
+                title: 'Éxito',
+                text: 'El formulario se envió correctamente.',
+                icon: 'success',
+            });
+            verMesas(sala.value);
+
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'El formulario NO se envió correctamente.',
+                icon: 'error',
+            });
+            console.log(ajax.responseText);
+            verMesas(sala.value);
+        }
+    };
     ajax.send(formdata);
 }
 

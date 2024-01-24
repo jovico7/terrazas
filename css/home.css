@@ -38,6 +38,10 @@ body {
     filter: brightness(0%);
 }
 
+.reserva {
+    filter: brightness(50%);
+}
+
 .logoutboton {
     color: white;
     background: linear-gradient(to right, #9B273F, #011535);

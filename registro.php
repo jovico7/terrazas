@@ -146,7 +146,7 @@ if (!isset($_SESSION['id'])) {
         try {
             $numFiltro = isset($_GET['numero_filtro']) ? intval($_GET['numero_filtro']) : 0;
 
-            $sql = "SELECT u.nombre_user, s.nombre_sala, m.numero_mesa, o.fecha_inicio, o.fecha_fin,
+            $sql = "SELECT u.nombre_user, s.nombre_sala, m.numero_mesa, o.fecha_inicio, o.fecha_fin, o.hora_reserva, o.tipo,
             TIMEDIFF(o.fecha_fin, o.fecha_inicio) AS duracion_ocupacion
             FROM ocupaciones o 
             INNER JOIN usuarios u ON o.id_usuario = u.id_usuario 
@@ -197,6 +197,8 @@ if (!isset($_SESSION['id'])) {
                 echo '<th>Fecha Inicio</th>';
                 echo '<th>Fecha Fin</th>';
                 echo '<th>Duración</th>';
+                echo '<th>Tipo</th>';
+                echo '<th>Hora de la Reserva</th>';
                 echo '</tr>';
                 echo '</thead>';
                 echo '<tbody>';
@@ -209,6 +211,8 @@ if (!isset($_SESSION['id'])) {
                     echo "<td>{$row['fecha_inicio']}</td>";
                     echo "<td>{$row['fecha_fin']}</td>";
                     echo "<td>{$row['duracion_ocupacion']}</td>";
+                    echo "<td>{$row['tipo']}</td>";
+                    echo "<td>{$row['hora_reserva']}</td>";
                     echo '</tr>';
                 }
 
